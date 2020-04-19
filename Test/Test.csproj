@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\CompanyInfo.cs" />
+    <Compile Include="Entity\MyListDemo.cs" />
+    <Compile Include="Entity\Person.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

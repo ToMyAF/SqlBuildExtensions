@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using SqlBuildExtensions;
 using Test.Entity;
@@ -36,6 +37,22 @@ namespace Test
             string sql = info.BuildSql();
             int aa = 0;
 
+            List<MyListDemo> listDemos = new List<MyListDemo>();
+            string className = "MyListDemo";
+            string namespaceStr = "Test.Entity";
+            var model = Assembly.GetExecutingAssembly().CreateInstance(string.Join(".", new object[] { namespaceStr, className }));
+            PropertyInfo[] pros = model.GetType().GetProperties();
+            foreach (var item in pros)
+            {
+                item.SetValue(model, "123456", null);
+            }
+            var modelList = Activator.CreateInstance(typeof(List<>).MakeGenericType(new Type[] { model.GetType() }));
+            var addMethod = modelList.GetType().GetMethod("Add");
+            addMethod.Invoke(modelList, new object[] { model });
+            listDemos = (List<MyListDemo>)modelList;
+
+            
         }
     }
+
 }
