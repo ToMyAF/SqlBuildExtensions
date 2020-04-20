@@ -5,6 +5,9 @@ using System.Reflection;
 using System.Text;
 using SqlBuildExtensions;
 using Test.Entity;
+using DatabaseFactoryL;
+using System.Data;
+using SqlBuildExtensions.Interface;
 
 namespace Test
 {
@@ -51,7 +54,11 @@ namespace Test
             addMethod.Invoke(modelList, new object[] { model });
             listDemos = (List<MyListDemo>)modelList;
 
-            
+            DatabaseFactoryF dbcontext = DatabaseSimpleFactoryL.GetInstance("Data Source=.;database=AhFApi;User ID=sa;Password=123456;", "SQLSERVER");
+            DataSet ds = dbcontext.GetDataSet($"SELECT '五菱宏光PLUS' as SPPM,'WLHG-201904200014G' as SPXH,'上海柳州汽车制造厂' as CJ,'Y' as IsSale,'0.89' as ZHEKOU,'69800' as Price from OrgDemo;SELECT OrgName as PNAME,OrgType as PVALUE from OrgDemo ");
+            IStandardMapper mapper = new DefaultMapper();
+            Car car = mapper.ToEntity<Car>(ds);
+            Console.ReadLine();
         }
     }
 

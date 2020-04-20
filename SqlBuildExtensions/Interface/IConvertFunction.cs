@@ -26,6 +26,6 @@ namespace SqlBuildExtensions.Interface
 {
     public interface IConvertFunction
     {
-        object ConvertHandle(object value);
+        object ConvertHandle(string propertyName, object value);
     }
 }

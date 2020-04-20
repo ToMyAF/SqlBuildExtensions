@@ -2,12 +2,12 @@
 *   
 *   =================================
 *   CLR版本    ：4.0.30319.42000
-*   命名空间    ：SqlBuildExtensions.Interface
-*   文件名称    ：IDataTableMapper.cs
+*   命名空间    ：SqlBuildExtensions
+*   文件名称    ：DefaultTableMapper.cs
 *   =================================
 *   创 建 者    ：李先锋
-*   创建日期    ：2020/4/13 16:30:38 
-*   功能描述    ：Datatable转实体类
+*   创建日期    ：2020/4/19 17:14:44 
+*   功能描述    ：
 *   使用说明    ：
 *   =================================
 *   修改者    ：
@@ -17,21 +17,27 @@
 *  
 ***************************************************************************/
 
+using SqlBuildExtensions.Interface;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using SqlBuildExtensions.Core;
+using System.Data;
+using System.Reflection;
 
-namespace SqlBuildExtensions.Interface
+namespace SqlBuildExtensions
 {
-    public interface IDataTableMapper
+    public class DefaultTableMapper : IDataTableMapper
     {
-        PropertyInfo[] GetAllProperty(Type type);
+        public PropertyInfo[] GetAllProperty(Type type)
+        {
+             return type.GetProperties();
+        }
 
-        MapperInfo GetMapperInfo(DataSet ds, PropertyInfo pi);
+        public MapperInfo GetMapperInfo(DataSet ds, PropertyInfo pi)
+        {
+            return MapperInfo.FromProperty(ds, pi);
+        }
     }
-
 }

@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DatabaseFactoryL">
+      <HintPath>..\..\..\其他\MQClientOnLine\DatabaseFactoryL\bin\Debug\DatabaseFactoryL.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\Car.cs" />
     <Compile Include="Entity\CompanyInfo.cs" />
     <Compile Include="Entity\MyListDemo.cs" />
     <Compile Include="Entity\Person.cs" />

@@ -159,14 +159,18 @@ namespace SqlBuildExtensions.Util
         /// <param name="innerType"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static object CreateGeneric(Type generic, Type innerType, params object[] args)
+        public static object CreateGeneric(Type instancetype)
         {
-            Type specificType = generic.MakeGenericType(new System.Type[] { innerType });
-            return Activator.CreateInstance(specificType, args);
+            return Activator.CreateInstance(typeof(List<>).MakeGenericType(new Type[] { instancetype }));
         }
-        public static void AddObjToGeneric<T>(T genericList,params object[] objs)
+        public static void AddObjToGeneric(object genericList,params object[] objs)
         {
             genericList.GetType().InvokeMember("Add", BindingFlags.Default | BindingFlags.InvokeMethod, null, genericList, objs);
+        }
+        public static object CreateGenericInstance(Type listtype,out Type instancetype)
+        {
+            Type instype = instancetype = listtype.GetGenericArguments()[0];
+            return AssemblyType(instancetype.Assembly.Location, instancetype.FullName);
         }
     }
 }

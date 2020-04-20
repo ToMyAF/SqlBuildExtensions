@@ -29,8 +29,10 @@ namespace SqlBuildExtensions.Core
 {
     public class MapperInfo
     {
-        public dynamic Value { get; set; }
-        internal static void PopulateFromProperty(DataSet ds,int rowInddex,object objValue,PropertyInfo pi, ref MapperInfo mi, out DataMapperAttribute dmAttr)
+        public string ColumnName { get; set; }
+        public DataTable SourceTb { get; set; }
+        public KeyValuePair<bool, MethodInfo> HasExtend { get; set; } = new KeyValuePair<bool, MethodInfo>(false, null);
+        internal static void PopulateFromProperty(DataSet ds,PropertyInfo pi, ref MapperInfo mi, out DataMapperAttribute dmAttr)
         {
             //验证Table修饰符
             var isExplicit = pi.DeclaringType.GetCustomAttributes(typeof(DataMapperAttribute), true).Any();
@@ -48,28 +50,19 @@ namespace SqlBuildExtensions.Core
             else
             {
                 mi = mi ?? new MapperInfo();
-                DataRow row = dmAttr.TableFlag == TableFlag.ByTableName ? ds.Tables[dmAttr.TableName].Rows[rowInddex] : ds.Tables[dmAttr.TableIndex].Rows[rowInddex];
-                if ((string.IsNullOrEmpty(dmAttr.ColumnName) ? row[pi.Name] : row[dmAttr.ColumnName]) != DBNull.Value)
+                mi.SourceTb = dmAttr.TableFlag == TableFlag.ByTableName ? ds.Tables[dmAttr.TableName] : ds.Tables[dmAttr.TableIndex];
+                mi.ColumnName = string.IsNullOrEmpty(dmAttr.ColumnName) ? pi.Name:dmAttr.ColumnName;
+                if (dmAttr.HasEntend)
                 {
-                    mi.Value = null;
-                }
-                 else if (dmAttr.HasEntend)
-                {
-                    MethodInfo method = pi.DeclaringType.GetMethod(dmAttr.ConvertFuncName);
-                    object extensions = method.Invoke(objValue, new object[] { string.IsNullOrEmpty(dmAttr.ColumnName)?row[pi.Name]:row[dmAttr.ColumnName]});
-                    mi.Value = Convert.ChangeType(extensions,pi.PropertyType);
-                }
-                else
-                {
-                    mi.Value = Convert.ChangeType(string.IsNullOrEmpty(dmAttr.ColumnName) ? row[pi.Name] : row[dmAttr.ColumnName],pi.PropertyType);
+                    mi.HasExtend = new KeyValuePair<bool, MethodInfo>(true,pi.DeclaringType.GetMethod(dmAttr.ConvertFuncName));
                 }
             }
 
         }
-        public static MapperInfo FromProperty(DataSet ds,int rowindex,object objValue,PropertyInfo pi)
+        public static MapperInfo FromProperty(DataSet ds,PropertyInfo pi)
         {
             var mi = new MapperInfo();
-            PopulateFromProperty(ds, rowindex, objValue, pi, ref mi, out _);
+            PopulateFromProperty(ds, pi, ref mi, out _);
             return mi;
         }
     }

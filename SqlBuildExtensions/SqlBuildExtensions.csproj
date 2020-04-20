@@ -47,6 +47,7 @@
     <Compile Include="DefaultBuildFormat.cs" />
     <Compile Include="DefaultMapper.cs" />
     <Compile Include="DefaultSqlBuid.cs" />
+    <Compile Include="DefaultTableMapper.cs" />
     <Compile Include="Entity\SqlBuildParameter.cs" />
     <Compile Include="Interface\DefaultFactory.cs" />
     <Compile Include="Interface\IBuildFacory.cs" />

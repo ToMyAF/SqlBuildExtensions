@@ -26,6 +26,7 @@ namespace Test.Entity
     [Table("GL_CUSTOMER")]
     public class CompanyInfo
     {
+
         [Column("CompanyName")]
         public string Name { get; set; }
 
