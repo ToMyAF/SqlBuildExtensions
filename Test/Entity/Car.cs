@@ -43,7 +43,7 @@ namespace Test.Entity
 
         [DataMapper(0)]
         public Money Money { get; set; }
-
+        [DataMapper(1, "PNAME")]
         public List<Info> Infos { get; set; }
 
         public object ConvertHandle(string propertyName,object value)
@@ -69,9 +69,20 @@ namespace Test.Entity
     public class Info
     {
         [DataMapper(1, "PNAME")]
-        public double PName { get; set; }
+        public string PName { get; set; }
 
         [DataMapper(1,"PVALUE")]
-        public double PValue { get; set; }
+        public string PValue { get; set; }
+
+        [DataMapper(1)]
+        public SubInfo SubInfo { get; set; }
+    }
+    public class SubInfo
+    {
+        [DataMapper(1, "PNAME")]
+        public string SubPName { get; set; }
+
+        [DataMapper(1, "PVALUE")]
+        public string SubPValue { get; set; }
     }
 }

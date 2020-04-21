@@ -169,8 +169,12 @@ namespace SqlBuildExtensions.Util
         }
         public static object CreateGenericInstance(Type listtype,out Type instancetype)
         {
-            Type instype = instancetype = listtype.GetGenericArguments()[0];
+            instancetype = listtype.GetGenericArguments()[0];
             return AssemblyType(instancetype.Assembly.Location, instancetype.FullName);
+        }
+        public static object CreateClassInstance(Type type)
+        {
+            return type.Assembly.CreateInstance(type.FullName);
         }
     }
 }
