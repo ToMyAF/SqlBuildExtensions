@@ -58,7 +58,9 @@ namespace Test
             DataSet ds = dbcontext.GetDataSet($"SELECT '五菱宏光PLUS' as SPPM,'WLHG-201904200014G' as SPXH,'上海柳州汽车制造厂' as CJ,'Y' as IsSale,'0.89' as ZHEKOU,'69800' as Price from OrgDemo;SELECT OrgName as PNAME,OrgType as PVALUE from OrgDemo ");
             IStandardMapper mapper = new DefaultMapper();
             Car car = mapper.ToEntity<Car>(ds);
+            List<Car> cars = mapper.ToEntity<List<Car>>(ds);
             Console.ReadLine();
+            
         }
     }
 

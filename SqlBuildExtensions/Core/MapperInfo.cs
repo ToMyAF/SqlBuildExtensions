@@ -57,12 +57,43 @@ namespace SqlBuildExtensions.Core
                     mi.HasExtend = new KeyValuePair<bool, MethodInfo>(true,pi.DeclaringType.GetMethod(dmAttr.ConvertFuncName));
                 }
             }
-
+        }
+        internal static void PopulateFromType(DataSet ds, Type pi, ref MapperInfo mi, out DataMapperAttribute dmAttr)
+        {
+            //验证Table修饰符
+            var isExplicit = pi.GetCustomAttributes(typeof(DataMapperAttribute), true).Any();
+            //var parrentAttr = pi.DeclaringType.GetCustomAttributes(typeof(DataMapperAttribute), true).FirstOrDefault() as DataMapperAttribute;
+            dmAttr = pi.GetCustomAttributes(typeof(DataMapperAttribute), true).FirstOrDefault() as DataMapperAttribute;
+            var isIgnore = pi.GetCustomAttributes(typeof(IgnoreAttribute), true).Any();
+            if (ds == null)
+            {
+                mi = null;
+            }
+            else if (isIgnore || (isExplicit && dmAttr == null))
+            {
+                mi = null;
+            }
+            else
+            {
+                mi = mi ?? new MapperInfo();
+                mi.SourceTb = dmAttr.TableFlag == TableFlag.ByTableName ? ds.Tables[dmAttr.TableName] : ds.Tables[dmAttr.TableIndex];
+                mi.ColumnName = string.IsNullOrEmpty(dmAttr.ColumnName) ? pi.Name : dmAttr.ColumnName;
+                if (dmAttr.HasEntend)
+                {
+                    mi.HasExtend = new KeyValuePair<bool, MethodInfo>(true, pi.DeclaringType.GetMethod(dmAttr.ConvertFuncName));
+                }
+            }
         }
         public static MapperInfo FromProperty(DataSet ds,PropertyInfo pi)
         {
             var mi = new MapperInfo();
             PopulateFromProperty(ds, pi, ref mi, out _);
+            return mi;
+        }
+        public static MapperInfo FromType(DataSet ds, Type classtype)
+        {
+            var mi = new MapperInfo();
+            PopulateFromType(ds, classtype, ref mi, out _);
             return mi;
         }
     }

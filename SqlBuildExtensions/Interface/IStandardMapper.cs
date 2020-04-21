@@ -29,6 +29,5 @@ namespace SqlBuildExtensions.Interface
     public interface IStandardMapper
     {
         T ToEntity<T>(DataSet ds) where T : class, new();
-        List<T> ToListEntity<T>(DataSet ds) where T : class,IList, new();
     }
 }
